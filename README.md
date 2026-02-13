@@ -1,6 +1,6 @@
 # Introduction
 
-Contains a collection of bash scripts that setup aliases (git and docker) and prompt configurations for a productive terminal on Linux/WSL.
+This repository contains a collection of bash scripts that setup aliases (git and docker) and prompt configurations for a productive terminal on Linux/WSL.
 
 The `install.sh` script  wires everything into your `~/.bashrc` -- no manual editing needed.
 
