@@ -65,7 +65,7 @@ fi
 # --- Migrate old hardcoded paths to use $BASH_SCRIPTS_DIR ---
 # Safe to run multiple times; only matches lines still using absolute paths.
 for suffix in git-setup.sh aliases.sh additional-setup.sh; do
-    sed -i "s|\"$SCRIPTS_DIR/$suffix\"|\"\\$BASH_SCRIPTS_DIR/$suffix\"|g" "$BASHRC"
+    sed -i 's|"'"$SCRIPTS_DIR/$suffix"'"|"$BASH_SCRIPTS_DIR/'"$suffix"'"|g' "$BASHRC"
 done
 echo "[MIGRATED] Replaced any hardcoded paths with \$BASH_SCRIPTS_DIR"
 
