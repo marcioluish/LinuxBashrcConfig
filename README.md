@@ -13,6 +13,7 @@ The `install.sh` script  wires everything into your `~/.bashrc` -- no manual edi
 - **Generic alias completion** -- automatically wires up tab-completion for all aliases pointing to commands that have completions
 
 ## Installation
+
 From your HOME directory, run:
 
 ```bash
@@ -21,14 +22,32 @@ bash ~/LinuxBashrcConfig/install.sh
 source ~/.bashrc
 ```
 
+### Install for all users (root + `/home/*`)
+
+When you use both root and a regular user (common on WSL), wire every account in one step:
+
+```bash
+sudo bash ~/LinuxBashrcConfig/install.sh --all-users
+```
+
+### Install for a specific user
+
+```bash
+sudo bash ~/LinuxBashrcConfig/install.sh --user root
+bash ~/LinuxBashrcConfig/install.sh --user marcio
+```
+
 The installer:
 
 1. Resolves its own location (works regardless of where you clone)
-2. Backs up your `~/.bashrc` before touching it
-3. Exports `BASH_SCRIPTS_DIR` with the resolved path (absolute path appears only once)
-4. Adds `source` lines referencing `$BASH_SCRIPTS_DIR`
-5. Is idempotent -- safe to run multiple times, skips lines already present
-6. If you move the repo, re-run `install.sh` to update the path automatically
+2. Backs up each target `~/.bashrc` before touching it
+3. Writes a managed block delimited by `# >>> LinuxBashrcConfig >>>` / `# <<< LinuxBashrcConfig <<<`
+4. Exports `BASH_SCRIPTS_DIR` and sources scripts from that directory
+5. Is idempotent -- re-running replaces the managed block (never duplicates lines)
+6. Removes legacy install lines from older versions on upgrade
+7. If you move the repo, re-run `install.sh` to update the path automatically
+
+When run as root with `--all-users` or `--user`, file ownership is restored to each target user.
 
 ## Repository Structure
 
@@ -37,7 +56,8 @@ install.sh              # One-command installer
 scripts/
 ├── git-setup.sh        # Git prompt (PS1) and completion framework
 ├── aliases.sh          # All aliases, functions, and git alias completions
-└── docker-ps-color.sh  # Colorized docker container listing
+├── docker-ps-color.sh  # Colorized docker container listing
+└── additional-setup.sh # Optional local overrides (gitignored, not in repo)
 ```
 
 ## Alias Reference
@@ -142,4 +162,4 @@ Performance notes: uses a single `docker ps` call, pre-builds separator strings 
 
 ## Customization
 
-To add your own aliases without modifying tracked files, create `scripts/additional-setup.sh` in the repo directory. If present, it is sourced automatically.
+To add your own aliases without modifying tracked files, create `scripts/additional-setup.sh` in the repo directory. The installer sources it automatically when the file exists (for every user configured via `install.sh`).

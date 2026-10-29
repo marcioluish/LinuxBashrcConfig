@@ -11,8 +11,7 @@ export VERTICAL="\nNames\t{{.Names}}\t\tCreated\t{{.RunningFor}}\t\tStatus\t{{.S
 # --- env aliases ---
 alias upd="sudo apt update && sudo apt upgrade"
 alias gitconfig="code ~/.ssh/config"
-alias lls="ls -l"
-alias lnls="ls -ln"
+alias lls="ls -alrt"
 alias rmzoneid="find . -name "*Zone.Identifier" -type f -delete"
 
 # --- Navigation aliases ---
@@ -115,9 +114,9 @@ dit() {
     fi
 
     local container
-    container=$(docker ps -a --format '{{.Names}}' | grep -- "-${app}-" | head -n 1)
+    container=$(docker ps -a --format '{{.Names}}' | grep -- "${app}" | head -n 1)
     if [[ -z "$container" ]]; then
-        echo "No container found matching '-${app}-'"
+        echo "No container found matching '${app}'"
         return 1
     fi
     docker exec -it "$container" bash
